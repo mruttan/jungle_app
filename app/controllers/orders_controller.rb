@@ -2,7 +2,12 @@ class OrdersController < ApplicationController
 
   def show
     @order = Order.find(params[:id])
-  end
+    @line_items = LineItem.where order_id: @order.id
+    @items = []
+    @line_items.each do |line_item|
+      product = Product.find(line_item.product_id)
+      @items.push(product)
+    end
 
   def create
     charge = perform_stripe_charge
